@@ -1,5 +1,5 @@
 # ShaAlgorithm2020
-# edit
+# edit :wq
 | Project Details   |     |
 | --- | --- |
 | **Course** | BSc (Hons) in Software Development  |
@@ -8,3 +8,11 @@
 | **Student** | Shane Moran |
 | **Module & Project Supervisor** | Ian McLoughlin |
 | **Project Title** | MD5 hash digest algorithm |
+
+
+
+**References & Resources**
+
+https://cloud.google.com/
+
+https://www.gnu.org/software/gnu-c-manual/gnu-c-manual.html
