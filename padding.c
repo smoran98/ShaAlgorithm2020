@@ -1,6 +1,9 @@
 // Shane Moran
 // Padding Sha256
 
+#include <stdio.h>
+#include <inttypes.h>
+
 union block {
     uint64_t sixFour[8]; // 64 * 8 = 512
     uint32_t threeTwo[16]; // 32 * 16 = 512
