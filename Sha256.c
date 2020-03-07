@@ -73,20 +73,7 @@ union block {
   uint8_t eight[64];
 };
 
-enum flag {READ, PAD0, PAD1, FINISH};
-
-uint64_t nozerobytes(uint64_t nobits) {
-
-  uint64_t result = 512ULL - (nobits % 512ULL);
-  
-  if (result < 65)
-    result += 512;
-
-  result -= 72;
-
-  return (result / 8ULL);
-}
-
+enum flag {READ, PAD0, FINISH};
 
 int nextblock(union block *M, FILE *infile, uint64_t *nobits, enum flag *status) {
   
@@ -150,35 +137,6 @@ void nexthash(union block *M, uint32_t *H) {
  }
 }
 
-int nextblock(union block *M, FILE *infile) {
-  for (*nobits = 0, i = 0; fread(&M->eight[i], 1, 1, infile) == 1; *nobits += 8) {
-  printf("Maj(x,y,z) = %08x\n", Maj(x, y, z));	    
-  printf("%02" PRIx8, M->eight[i]);
-  }
-
-  printf("%02" PRIx8, 0x80); // Bits: 1000 0000
-
-
-  printf("SHR(x,4)   = %08x\n", SHR(x, 4));	 
-  
-  for (uint64_t i = nozerobytes(*nobits); i > 0; i--)
-  printf("ROTR(x,4)  = %08x\n", ROTR(x, 4));	    
-  printf("%02" PRIx8, 0x00);
-  
-}
-
-int main(int argc, char *argv[]) {
-
-  if (argc != 2) {
-    printf("Error: expected single filename as argument.\n");
-    return 1;
-  }
-
-  FILE *infile = fopen(argv[1], "rb");
-  if (!infile) {
-    printf("Error: couldn't open file %s.\n", argv[1]);
-    return 1;
-  }
 
   // Section 5.3.3
   uint32_t H[] = {
@@ -191,31 +149,6 @@ int main(int argc, char *argv[]) {
   uint64_t nobits = 0;
   enum flag status = READ;
 
-  // Read through all of the padded message blocks.
-  while (nextblock(&M, infile, &nobits, &status)) {
-    // Calculate the next hash value.
-    nexthash(&M, H);
-  }
-
-  for (int i = 0; i < 8; i++)
-    printf("%02" PRIX32 "", H[i]);
-  printf("\n");
-  fclose(infile);
-
-  return 0;
-}
-
-// Shane Moran
-// Padding Sha256
-
-#include <stdio.h>
-#include <inttypes.h>
-
-union block {
-    uint64_t sixFour[8]; // 64 * 8 = 512
-    uint32_t threeTwo[16]; // 32 * 16 = 512
-    uint8_t eight[64]; // 8 * 64 = 512
-}; 
 
 
 uint64_t no_zeros_bytes(uint64_t no_bits) {
