@@ -90,6 +90,30 @@ uint64_t nozerobytes(uint64_t nobits) {
 
 int nextblock(union block *M, FILE *infile, uint64_t *nobits, enum flag *status) {
   
+  if (*status == FINISH)
+    return 0;
+
+  if (*status == PAD1) {
+    M.eight[0] = 0x08;
+    for (int i = 1; i < 56; i ++)
+      M.eight[i] = 0;
+     M.sixtyfour[7] = *nobits;
+      *status = FINISH;
+      return 1;
+   }
+
+  if(*status == PAD0) {
+    for (int i = 0; i < 56; i ++)
+      M.eight[i] = 0;
+     M.sixtyfour[7] = *nobits;
+      *status = FINISH;
+      return 1;
+     }
+  
+  size_t nobytesread = fread(M.eight, 1, 64, infile);
+  if (nobytesread == 64)
+   return 1;
+
   uint8_t i;
 
   for (*nobits = 0, i = 0; fread(&M.eight[i], 1, 1, infile) == 1; *nobits += 8) {
