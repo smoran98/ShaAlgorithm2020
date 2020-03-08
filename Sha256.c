@@ -135,32 +135,7 @@ void nexthash(union block *M, uint32_t *H) {
   H[0] = a + H[0];  H[1] = b + H[1];  H[2] = c + H[2];  H[3] = d + H[3];
   H[4] = e + H[4];  H[5] = f + H[5];  H[6] = g + H[6];  H[7] = f + H[7];
  }
-}
 
-
-  // Section 5.3.3
-  uint32_t H[] = {
-    0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a,
-    0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19  
-  };
-  
-  // The current padded message block.
-  union block M;
-  uint64_t nobits = 0;
-  enum flag status = READ;
-
-
-
-uint64_t no_zeros_bytes(uint64_t no_bits) {
-    uint64_t result = 512 - (no_bits % 512ULL);
-
-    if (result < 65) {
-        result += 512;
-    }
-
-    result -= 72;
-
-    return (result / 8ULL);
 }
 
 int main(int argc, char *argv[]) {
@@ -177,25 +152,28 @@ int main(int argc, char *argv[]) {
         printf("Error: couldn't open file %s. \n", argv[1]);
         return 1;
     }
-
-    uint64_t noBits;
+    // Section 5.3.3
+    uint32_t H[] = {
+      0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a,
+      0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19 
+    }
+    
+    // Current padded message block
+    uint64_t noBits = 0;
     union block M;
-    uint8_t i;
+    enum flag status = READ;
 
-    for (noBits = 0, i = 0; fread(&M.eight[i], 1, 1, inFile) == 1; noBits += 8) {
-        printf("%02" PRIx8, M.eight[i]);
-    }
+    // Read through all of padded message blocks
+    while (nextblock(&M, infile, &nobits, &status)) {
+    // Calculate the next hash value.
+    nexthash(&M, H);
+    } 
 
-    printf("%02" PRIx8, 0x80); // Bits: 1000 0000
+    // Print the hash.
+    for (int i = 0; i < 8; i++)
+        printf("%08" PRIx32 "", H[i]);
+     printf("\n");
+     fclose(infile);
 
-    for (uint64_t i = (no_zeros_bytes(noBits)); i > 0; i--) {
-        printf("%02" PRIx8, 0x00);
-    }
-
-    printf("%016" PRIx64 "\n", noBits);
-    printf("\n");
-    fclose(inFile);
-
- return 0;
-
-}
+      return 0;
+  }
