@@ -16,3 +16,9 @@
 https://cloud.google.com/
 
 https://www.gnu.org/software/gnu-c-manual/gnu-c-manual.html
+
+http://cacr.uwaterloo.ca/hac/
+
+https://www.bell-labs.com/usr/dmr/www/chist.html
+
+http://9p.io/cm/cs/cbook/index.html
