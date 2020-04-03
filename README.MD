@@ -1,5 +1,5 @@
 # ShaAlgorithm2020
-# edit :wq
+
 | Project Details   |     |
 | --- | --- |
 | **Course** | BSc (Hons) in Software Development  |
@@ -13,12 +13,12 @@
 
 **References & Resources**
 
-https://cloud.google.com/
+[1] https://cloud.google.com/
 
-https://www.gnu.org/software/gnu-c-manual/gnu-c-manual.html
+[2] https://www.gnu.org/software/gnu-c-manual/gnu-c-manual.html
 
-http://cacr.uwaterloo.ca/hac/
+[3] http://cacr.uwaterloo.ca/hac/
 
-https://www.bell-labs.com/usr/dmr/www/chist.html
+[4] https://www.bell-labs.com/usr/dmr/www/chist.html
 
-http://9p.io/cm/cs/cbook/index.html
+[5] http://9p.io/cm/cs/cbook/index.html
