@@ -11,7 +11,7 @@
 
 #pragma region PREPROCESSING SETUP
 // 64-byte block of memory, accessed via different types
-typedef union {
+typedef union block{
     uint64_t sixfour[8];
     uint32_t threetwo[16];
     uint8_t eight[64];
@@ -26,28 +26,12 @@ typedef enum {READ, PAD0, FINISH} PADFLAG;
 const uint32_t K[] = {0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5};
 
 // func's
-//uint32_t F(uint32_t x, uint32_t y, uint32_t z)
-//{
-//    return (x & y) | (~x & z);
-//}
 #define F(x,y,z) (((x) & (y)) | ((~x) & (z)))
 
-//uint32_t G(uint32_t x, uint32_t y, uint32_t z)
-//{
-//    return (x & y) | (y & ~z);
-//}
 #define G(x, y, z) (((x) & (z)) | ((y) & (~z)))
 
-//uint32_t H(uint32_t x, uint32_t y, uint32_t z)
-//{
-//    return (x ^ y ^ z);
-//}
 #define H(x, y, z) ((x) ^ (y) ^ (z))
 
-//uint32_t I(uint32_t x, uint32_t y, uint32_t z)
-//{
-//    return (y ^ (x | ~z));
-//}
 #define I(x, y, z) ((y) ^ ((x) | (~z)))
 
 
@@ -156,23 +140,27 @@ int nexthash(union block *M, uint32_t *H)
     int t;
     int s;
 
+
     for (t = 0; t < 16; t++)
     {
 
-    for (s = 16; s < 64; t++)
-    {
-        W[s] = M->threetwo[t * 16 + s];
-    }
+        for (s = 16; s < 64; s++)
+        {
+            W[s] = M->threetwo[t * 16 + s];
+        }
 
         AA = A;
         BB = B;
         CC = C;
         DD = D;
+
+        return 1;
     }
+    return 0;
 }
 
 
-
+// display
 void heading()
 {
     printf("\n G00338607 - Shane Moran");
@@ -183,11 +171,6 @@ void heading()
 int main(int argc, char *argv[]) {
     // Output string & heading
     heading();
-
-    printf("\n");
-    printf("Hello, World!");
-    printf("\n");
-    printf("K[2]         = %08x\n", K[2]);
 
     uint32_t x = K[0];
     uint32_t y = K[1];
