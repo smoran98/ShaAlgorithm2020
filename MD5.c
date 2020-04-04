@@ -51,7 +51,38 @@ const uint32_t K[] = {0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5};
 #define I(x, y, z) ((y) ^ ((x) | (~z)))
 
 
-#define ROTATE_LEFT(x, n) (((x) << (n)) | ((x) >> (32-(n))))
+#define ROTATE_LEFT(x, n) (((x) << (n)) | ((x) >> (32 - (n))))
+
+// basic MD5 func's'
+#define F(x, y, z) (((x) & (y)) | ((~x) & (z)))
+#define G(x, y, z) (((x) & (z)) | ((y) & (~z)))
+#define H(x, y, z) ((x) ^ (y) ^ (z))
+#define I(x, y, z) ((y) ^ ((x) | (~z)))
+
+// transformations for rounds 1-4
+#define FF(a, b, c, d, x, s, ac) { \
+ (a) += F ((b), (c), (d)) + (x) + (UINT4)(ac); \
+ (a) = ROTATE_LEFT ((a), (s)); \
+ (a) += (b); \
+  }
+
+#define GG(a, b, c, d, x, s, ac) { \
+ (a) += G ((b), (c), (d)) + (x) + (UINT4)(ac); \
+ (a) = ROTATE_LEFT ((a), (s)); \
+ (a) += (b); \
+  }
+
+#define HH(a, b, c, d, x, s, ac) { \
+ (a) += H ((b), (c), (d)) + (x) + (UINT4)(ac); \
+ (a) = ROTATE_LEFT ((a), (s)); \
+ (a) += (b); \
+  }
+
+#define II(a, b, c, d, x, s, ac) { \
+ (a) += I ((b), (c), (d)) + (x) + (UINT4)(ac); \
+ (a) = ROTATE_LEFT ((a), (s)); \
+ (a) += (b); \
+  }
 
 #pragma endregion
 
@@ -114,28 +145,32 @@ int nextblock(BLOCK *M, FILE *infile, uint64_t *nobits, enum PADFLAG *status) {
 }
 
 // Section 6.2.2
-void nexthash(WORD *M, WORD *H) {
-
-    WORD W[64];
-    WORD a, b, c, d, e, f, g, h, T1, T2;
+int nexthash(union block *M, uint32_t *H)
+{
+    uint32_t W[64];
+    uint32_t A, AA, B, BB, C, CC, D, DD;
+    A = K[0];
+    B = K[1];
+    C = K[2];
+    D = K[3];
     int t;
+    int s;
 
     for (t = 0; t < 16; t++)
-        W[t] = M[t];
+    {
 
-    for (t = 16; t < 64; t++)
-        W[t] = sig1(W[t-2]) + W[t-7] + sig0(W[t-15]) + W[t-16];
+    for (s = 16; s < 64; t++)
+    {
+        W[s] = M->threetwo[t * 16 + s];
+    }
 
-    a = H[0]; b = H[1]; c = H[2]; d = H[3];
-    e = H[4]; f = H[5]; g = H[6]; h = H[7];
-
-    for (t = 0; t < 64; t++) {
-        T1 = h + Sig1(e) + Ch(e, f, g) + K[t] + W[t];
-        T2 = Sig0(a) + Maj(a, b, c);
-        h = g; g = f; f = e; e = d + T1;
-        d = c; c = b; b = a; a = T1 + T2;
+        AA = A;
+        BB = B;
+        CC = C;
+        DD = D;
     }
 }
+
 
 
 void heading()
