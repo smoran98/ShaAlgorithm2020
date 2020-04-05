@@ -2,7 +2,6 @@
 // Created by Shane Moran on 03/04/2020.
 // All Online Resources & References can be found in the README.MD
 
-// imports
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>
@@ -86,7 +85,7 @@ int nextblock(BLOCK *M, FILE *infile, uint64_t *nobits, enum PADFLAG *status) {
                     M->eight[i] = 0x00;
                 *status = PAD0;
             }
-            
+
     return 1;
 
 }
@@ -94,6 +93,7 @@ int nextblock(BLOCK *M, FILE *infile, uint64_t *nobits, enum PADFLAG *status) {
 // Section 6.2.2
 int nexthash(union block *M, uint32_t *H)
 {
+    // var's
     uint32_t W[64];
     uint32_t A, AA, B, BB, C, CC, D, DD;
     A = K[0];
