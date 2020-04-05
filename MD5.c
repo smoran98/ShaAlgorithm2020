@@ -2,6 +2,7 @@
 // Created by Shane Moran on 03/04/2020.
 // All Online Resources & References can be found in the README.MD
 
+// imports
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>
@@ -53,20 +54,20 @@ const uint32_t K[] = {0xd76aa478, 0xe8c7b756, 0x242070db, 0xc1bdceee,
 // Section 5.1.1 - message input from infile.
 int nextblock(BLOCK *M, FILE *infile, uint64_t *nobits, enum PADFLAG *status) {
 
+    // var's
     int i;
     size_t nobytesread;
 
-    switch(*status){
-        case FINISH:
-            return 0;
-        case PAD0:
             // We need an all-padding block without the 1 bit.
-            for (int i = 0; i < 56; i++)
-                M->eight[i] = 0x00;
-            M->sixfour[7] = htobe64(*nobits);
-            *status = FINISH;
-            break;
-        default:
+            if (*status == PAD0) {
+                for (i = 0; i < 56; i++)
+                    M ->eight[i] = 0x00;
+                M->sixfour[7] = *nobits;
+                *status = FINISH;
+
+                return 1;
+            }
+
             // Try to read 64 bytes from the file.
             nobytesread = fread(M->eight, 1, 64, infile);
             *nobits += (8ULL * ((uint64_t) nobytesread));
@@ -76,7 +77,7 @@ int nextblock(BLOCK *M, FILE *infile, uint64_t *nobits, enum PADFLAG *status) {
                 M->eight[nobytesread] = 0x80;
                 for (i = nobytesread + 1; i < 56; i++)
                     M->eight[i] = 0x00;
-                M->sixfour[7] = htobe64(*nobits);
+                M->sixfour[7] = *nobits;
                 *status = FINISH;
             } else if (nobytesread < 64) {
                 // Otherwise we have read between 56 (incl) and 64 (excl) bytes.
@@ -85,12 +86,7 @@ int nextblock(BLOCK *M, FILE *infile, uint64_t *nobits, enum PADFLAG *status) {
                     M->eight[i] = 0x00;
                 *status = PAD0;
             }
-    }
-
-    // Convert to host endianess, word-size-wise.
-    for (i = 0; i < 16; i++)
-        M->threetwo[i] = be32toh(M->threetwo[i]);
-
+            
     return 1;
 
 }
