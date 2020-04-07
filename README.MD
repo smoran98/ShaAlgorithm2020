@@ -19,6 +19,11 @@ Force [7]. The only pre-requisite is that your program performs the algorithm
 I suggest you allow the user to input some free text or a filename via the
 command line.
 
+## Architecture
+
+
+## How to Run
+
 
 **References & Resources**
 
@@ -33,7 +38,10 @@ command line.
 [5] http://9p.io/cm/cs/cbook/index.html
 
 ##### Software used
+
+```
 [6] https://www.jetbrains.com/clion/
+```
 
 [7] https://tools.ietf.org/html/rfc1321
 
