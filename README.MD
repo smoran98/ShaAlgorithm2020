@@ -53,7 +53,8 @@ CLion is a cross-platform IDE which natively supports C and C++, libc++ and Boos
 
 [5] http://9p.io/cm/cs/cbook/index.html
 
-[6]: https://www.jetbrains.com/clion/
+
+[6]  https://www.jetbrains.com/clion/
 
 [7] https://tools.ietf.org/html/rfc1321
 
