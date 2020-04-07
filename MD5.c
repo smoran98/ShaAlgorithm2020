@@ -48,6 +48,7 @@ enum PADFLAG {READ, PAD0, FINISH} ;
 
 #define ROTATE_LEFT(x, n) (((x) << (n)) | ((x) >> (32 - (n))))
 
+// transformations
 // rounds 1-4
 #define FF(a, b, c, d, x, s, ac) {\
  (a) += F ((b), (c), (d)) + (x) + (UINT4)(ac);\
@@ -106,45 +107,37 @@ int nextblock(union block *M, FILE *infile, uint64_t *nobits, enum PADFLAG *stat
     int i;
     size_t nobytesread;
 
-        if (*status == FINISH)
-            return 0;
+    // We need an all-padding block without the 1 bit.
+    if (*status == PAD0) {
+        for (i = 0; i < 56; i++)
+            M ->eight[i] = 0x00;
+        M->sixfour[7] = *nobits;
+        *status = FINISH;
 
-            // We need an all-padding block without the 1 bit.
-            if (*status == PAD0) {
-                for (i = 0; i < 56; i++)
-                    M ->eight[i] = 0x00;
-                M->sixfour[7] = *nobits;
-                *status = FINISH;
+        return 1;
+    }
 
-                return 1;
-            }
+    // Try to read 64 bytes from the file.
+    nobytesread = fread(M->eight, 1, 64, infile);
+    //*nobits += (8ULL * ((uint64_t) nobytesread));
+    if (nobytesread == 56) {
+        // We can put all padding in this block.
+        M->eight[nobytesread] = 0x80;
+        for (i = nobytesread + 1; i < 56; i++)
+            M->eight[i] = 0;
+        M->sixfour[7] = *nobits;
+        *status = FINISH;
 
-            // Try to read 64 bytes from the file.
-            nobytesread = fread(M->eight, 1, 64, infile);
-            
-            if (nobytesread == 64)
-                return 1;
+        return 1;
 
-            if (nobytesread == 56) {
-                // We can put all padding in this block.
-                M->eight[nobytesread] = 0x80;
-                for (i = nobytesread + 1; i < 56; i++)
-                    M->eight[i] = 0;
-                M->sixfour[7] = *nobits;
-                *status = FINISH;
+    }
+    // Otherwise we have read between 56 (incl) and 64 (excl) bytes.
+    M->eight[nobytesread] = 0x80;
+    for (int i = nobytesread + 1; i < 64; i++)
+        M->eight[i] = 0x00;
+    *status = PAD0;
 
-                return 1;
-
-            } else if (nobytesread < 64) {
-                // Otherwise we have read between 56 (incl) and 64 (excl) bytes.
-                M->eight[nobytesread] = 0x80;
-                for (int i = nobytesread + 1; i < 64; i++)
-                    M->eight[i] = 0x00;
-                *status = PAD0;
-
-                return 1;
-
-            }
+    return 1;
 }
 
 // Section 6.2.2
@@ -249,18 +242,42 @@ int main(int argc, char *argv[]) {
     // Output string & heading
     heading();
 
-    uint32_t x = K[0];
-    uint32_t y = K[1];
-    uint32_t z = K[2];
+    printf("\n");
 
-    printf("x  K[0] = %08x\n", K[0]);
-    printf("y  K[1] = %08x\n", K[1]);
-    printf("z  K[2] = %08x\n", K[2]);
+    if (argc != 2)
+    {
+        printf("Error: expected single filename as argument.\n");
+        return 1;
+    }
+    FILE *infile = fopen(argv[1], "rb");
+    if (!infile)
+    {
+        printf("Error: couldn't open file %s.\n", argv[1]);
+        return 1;
+    }
+    uint32_t H[] = {
+            0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476
+    };
 
-    printf("F(x,y,z) = %08x\n", F(K[0], K[1], K[2]));
-    printf("G(x,y,z) = %08x\n", G(K[0], K[1], K[2]));
-    printf("H(x,y,z) = %08x\n", H(K[0], K[1], K[2]));
-    printf("I(x,y,z) = %08x\n", I(K[0], K[1], K[2]));
+    union block M;
+    uint64_t nobits = 0;
+    enum flag status = READ;
+    // Read through all of the padded message blocks.
+    while (nextblock(&M, infile, &nobits, &status)){
+        // gets nexthash value
+        nexthash(&M, H);
+    }
+
+    printf("\n Hash value of the file with MD5 algorithm\n");
+
+    // print hash
+    for (int i = 0; i < 4; i++)
+
+        printf("%02" PRIx32 "", H[i]);
+
+    printf("\n");
+
+    fclose(infile);
 
     return 0;
 }
