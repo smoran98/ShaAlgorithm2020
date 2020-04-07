@@ -10,14 +10,14 @@
 #include <string.h>
 
 // 64-byte block of memory, accessed via different types
-typedef union block{
+union block{
     uint64_t sixfour[8];
     uint32_t threetwo[16];
     uint8_t eight[64];
-} BLOCK;
+};
 
 // Keep track of where we are in padding the message.
-typedef enum {READ, PAD0, FINISH} PADFLAG;
+enum PADFLAG {READ, PAD0, FINISH} ;
 
 // func's
 #define F(x,y,z) (((x) & (y)) | ((~x) & (z)))
@@ -51,7 +51,7 @@ const uint32_t K[] = {0xd76aa478, 0xe8c7b756, 0x242070db, 0xc1bdceee,
 
 
 // Section 5.1.1 - message input from infile.
-int nextblock(BLOCK *M, FILE *infile, uint64_t *nobits, enum PADFLAG *status) {
+int nextblock(union block *M, FILE *infile, uint64_t *nobits, enum PADFLAG *status) {
 
     // var's
     int i;
