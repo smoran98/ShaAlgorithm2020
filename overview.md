@@ -10,8 +10,10 @@
 | **Project Title** | MD5 hash digest algorithm |
 
 
+# Introduction
+
 ## Problem statement
-You must write a program in the [C programming language](http://www.open-std.org/jtc1/sc22/wg14/) that calculates
+You must write a program in the [C programming language](http://www.open-std.org/jtc1/sc22/wg14/)that calculates
 the MD5 hash digest of an input. The algorithm is specified in the Request
 For Comments 1321 document supplied by the Internet Engineering Task
 Force [here](https://tools.ietf.org/html/rfc1321). The only pre-requisite is that your program performs the algorithm
@@ -19,12 +21,14 @@ Force [here](https://tools.ietf.org/html/rfc1321). The only pre-requisite is tha
 I suggest you allow the user to input some free text or a filename via the
 command line.
 
+# Algorithm
 ## Architecture
-
-The MD5 message-digest algorithm is a widely used hash function producing a 128-bit hash value. Although MD5 was initially designed to be used as a cryptographic hash function, it has been found to suffer from extensive vulnerabilities. It can still be used as a checksum to verify data integrity, but only against unintentional corruption. It remains suitable for other non-cryptographic purposes, for example for determining the partition for a particular key in a partitioned database. MD5 was designed by Ronald Rivest in 1991 to replace an earlier hash function MD4, and was specified in 1992 as [RFC 1321](https://tools.ietf.org/html/rfc1321). One basic requirement of any cryptographic hash function is that it should be computationally infeasible to find two distinct messages that hash to the same value. MD5 fails this requirement catastrophically; such collisions can be found in seconds on an ordinary home computer. The weaknesses of MD5 have been exploited in the field, most infamously by the Flame malware in 2012. The CMU Software Engineering Institute considers MD5 essentially "cryptographically broken and unsuitable for further use".
+Whether it was watching one the videos or listening along in one of our lectures, it definetly simplified things when it came to actually tackling the MD5 message-digest algorithm which is a widely used hash function producing a 128-bit hash value. Although MD5 was initially designed to be used as a cryptographic hash function, it has been found to suffer from extensive vulnerabilities. It can still be used as a checksum to verify data integrity, but only against unintentional corruption. It remains suitable for other non-cryptographic purposes, for example for determining the partition for a particular key in a partitioned database. MD5 was designed by Ronald Rivest in 1991 to replace an earlier hash function MD4, and was specified in 1992 as [RFC 1321](https://tools.ietf.org/html/rfc1321). One basic requirement of any cryptographic hash function is that it should be computationally infeasible to find two distinct messages that hash to the same value. MD5 fails this requirement catastrophically; such collisions can be found in seconds on an ordinary home computer. The weaknesses of MD5 have been exploited in the field, most infamously by the Flame malware in 2012. The CMU Software Engineering Institute considers MD5 essentially "cryptographically broken and unsuitable for further use".
 
 ![MD5](https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/CPT-Hashing-File-Transmission.svg/350px-CPT-Hashing-File-Transmission.svg.png)![MD5two](https://1.bp.blogspot.com/-HUmboHR6vI8/XZCFccNH9iI/AAAAAAAAC_Q/bnzNNMwAjjInclBSxE81b8Zy-C9CL0iOACLcBGAsYHQ/s1600/MD5--Hashing.png)
 
+
+# Run
 
 ## How to Run 
 The following project's guide on how to run is guided towards windows operating systems, but, we first need to discuss what software is needed. 
@@ -61,6 +65,7 @@ As long you saved a test file ***in the ShaAlgorithm2020 directory***, you shoul
 ./MD5 --run "file" (OR run using CLion)
 ```
 
+# Test
 
 ### Commands
 
@@ -87,37 +92,52 @@ MD5 --info "file"
 ![CLion run](https://i.imgur.com/K0vnlZT.gif)
 
 
+# Complexity
 
-
+# References
 
 **References & Resources**
 
 [1] https://cloud.google.com/
 
+You can use Google Cloud Platform as a VM to code, not necessary
+
 [2] https://www.gnu.org/software/gnu-c-manual/gnu-c-manual.html
+
+Great guide for learning C, from defining constants to calling functions
 
 [3] http://cacr.uwaterloo.ca/hac/
 
+See Chapter 9 - Hash Functions and Data Integrity pdf
+
 [4] https://www.bell-labs.com/usr/dmr/www/chist.html
 
-[5] http://9p.io/cm/cs/cbook/index.html
+The Development of the C Language
 
-[6]  https://www.jetbrains.com/clion/
+[5]  https://www.jetbrains.com/clion/
 
-[7] https://tools.ietf.org/html/rfc1321
+Link to Download CLion
 
-[8] http://www.open-std.org/jtc1/sc22/wg14/
+[6] https://tools.ietf.org/html/rfc1321
 
-[9] https://git-scm.com/
+Used for Constants for MD5Transform routine, transformations for rounds and padding
 
-[10] https://www.gmit.ie/general/quality-assurance-framework
+[7] https://git-scm.com/
 
-[11] https://en.wikipedia.org/wiki/MD5
+Link to Download Git
 
-[12] https://stackoverflow.com/questions/9642732/parsing-command-line-arguments-in-c
+[8] https://en.wikipedia.org/wiki/MD5
 
-[13] https://stackoverflow.com/questions/9642732/parsing-command-line-arguments-in-c
+About MD5
 
-[14] https://youtu.be/SjyR74lbZOc
+[9] https://stackoverflow.com/questions/9642732/parsing-command-line-arguments-in-c
 
-[15] https://www.gnu.org/software/libc/manual/html_node/Getopt-Long-Option-Example.html
+Command Line Arguments
+
+[10] https://youtu.be/SjyR74lbZOc
+
+C Programming and using getopt()
+
+[11] https://www.gnu.org/software/libc/manual/html_node/Getopt-Long-Option-Example.html
+
+Example of Parsing Long Options with getopt_long
