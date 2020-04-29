@@ -92,3 +92,11 @@ As long you saved a test file ***in the ShaAlgorithm2020 directory***, you shoul
 [10] https://www.gmit.ie/general/quality-assurance-framework
 
 [11] https://en.wikipedia.org/wiki/MD5
+
+[12] https://stackoverflow.com/questions/9642732/parsing-command-line-arguments-in-c
+
+[13] https://stackoverflow.com/questions/9642732/parsing-command-line-arguments-in-c
+
+[14] https://youtu.be/SjyR74lbZOc
+
+[15] https://www.gnu.org/software/libc/manual/html_node/Getopt-Long-Option-Example.html
