@@ -253,11 +253,19 @@ void help(){
     printf("-t           --test           tests MD5\n");
     printf("-h           --help           commands\n");
     printf("-r           --run           runs programs (***file required***)\n");
+    printf("-i           --info           about MD5\n");
+
 }
 void test(){
 
     printf("test complete, i guess\n");
 
+}
+
+void info(){
+    printf("About MD5:\n");
+    printf("MD5 is a cryptographic hash function whose main purpose is to verify that a file has been unaltered.\n");
+    printf("It produces hash values of size 128-bit and was designed by Ronald Rivest\n");
 }
 
 
@@ -277,6 +285,7 @@ int main(int argc, char *argv[]) {
                         {"test",    no_argument,      0,  't'},
                         {"help",     no_argument,       0, 'h'},
                         {"run",  no_argument,       0, 'r'},
+                        {"info",  no_argument,       0, 'i'},
                         {0, 0, 0, 0}
                 };
         /* getopt_long stores the option index here. */
@@ -316,6 +325,12 @@ int main(int argc, char *argv[]) {
                     return 1;
                 }
 
+            case 'i':
+                info();
+                break;
+
+
+
 
                 // We assume argv[1] is a filename to open
                 FILE *infile = fopen(argv[2], "rb");
@@ -337,6 +352,7 @@ int main(int argc, char *argv[]) {
                     nexthash(&M, H);
                 }
 
+                // print hash
                 printf("File: %s\n Hash Output: ", argv[2]);
 
                 for (int i = 0; i < 4; i++)
