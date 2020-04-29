@@ -107,6 +107,30 @@ MD5 --info "file"
 
 # Complexity
 
+MD5 is designed to be cryptographically irreversible. In this case, the most important property is that it is computationally unfeasible to find the reverse of a hash, but it is easy to find the hash of any data. For example, let's think about just operating on numbers (binary files could be interpreted as a very long number).
+
+Let's say we have the number "7", and we want to take the hash of it. Perhaps the first thing we try as our hash function is "multiply by two". As we'll see, this is not a very good hash function, but we'll try it, to illustrate a point. In this case, the hash of the number will be "14". That was pretty easy to calculate. But now, if we look at how hard it is to reverse it, we find that it is also just as easy! Given any hash, we can just divide it by two to get the original number! This is not a good hash, because the whole point of a hash is that it is much harder to calculate the inverse than it is to calculate the hash .
+[1](https://stackoverflow.com/questions/6603849/why-is-it-not-possible-to-reverse-a-cryptographic-hash)
+
+
+An ideal cryptographic hash function has the following main properties:
+
+- Same message always results in the same hash
+- Quick to compute the hash value 
+- Infeasible to generate a message that yields a given hash value
+- Infeasible to find two different messages with the same hash value
+- Small changes to a message change a hash value so much that the new hash value appears so much different in comparison to the old hash value, [avalanche effect](https://en.wikipedia.org/wiki/Avalanche_effect)
+[2](https://en.wikipedia.org/wiki/Cryptographic_hash_function)
+
+![Avalanche Effect](https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Cryptographic_Hash_Function.svg/375px-Cryptographic_Hash_Function.svg.png)
+
+
+You can't "reverse" password hashes. You can't "dehash" passwords. You can't "reverse" MD5, SHA256, bcrypt, SHA1, or similar hashes, salted or unsalted. You usually can't "decode" passwords, "decrypt" password hashes or "reverse" or "unscramble" password hashes at all. There's no such thing as a "dehashing tool" or a "dehashing program" or a "password reversing program". These terms run completely counter to the fundamental concept of hashing as a one-way function. These terms are inaccurate. They're basically the password-cracking equivalent of showing up on a baking forum and saying "I bought this cake. How can I turn it back into eggs and flour and milk?" 
+[3](https://www.techsolvency.com/passwords/dehashing-reversing-decrypting/)
+
+![Reverse Hash](https://miro.medium.com/max/1400/1*gHVavC-9-0BIKOacMcz5Cg.png)
+
+
 # References
 
 **References & Resources**
