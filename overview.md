@@ -70,6 +70,19 @@ As long you saved a test file ***in the ShaAlgorithm2020 directory***, you shoul
 ### Commands
 
 ##### Test
+
+![Declaring func's and printfs](https://github.com/smoran98/ShaAlgorithm2020/blob/master/Tests/Test1.PNG)
+
+![Calling Funtion](https://github.com/smoran98/ShaAlgorithm2020/blob/master/Tests/Test2.PNG)
+
+```
+I basically just declared the functions and wrote the printfs. 
+
+Then, I call each of the three functions declared above and break.
+```
+
+
+
 ```
 MD5 --test "file"
 ```
