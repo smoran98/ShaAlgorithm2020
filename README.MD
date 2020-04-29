@@ -32,7 +32,7 @@ The following project's guide on how to run is guided towards windows operating 
 [CLion](https://www.jetbrains.com/clion/) is a cross-platform IDE which natively supports C and C++, libc++ and Boost. It offers instant navigation to a symbol's declaration or usages, code generation for constructors/destructors, operators and more
 To run MD5, the following software may be required to installed. Firstly, if you want to clone this repository it is recommended that [Git](https://git-scm.com/) is installed and can be done by following the instructions in the link below or clicking on the link.
 
-To run this program you will need to intall a C compiler. I recommend using the [GCC](https://gcc.gnu.org/install/index.html) compiler. Like with git, follow the installation instructions and you'll be fine.
+To run this program you will need to intall a C compiler. I recommend using the [GCC](https://jmeubank.github.io/tdm-gcc/) compiler. Like with git, follow the installation instructions and you'll be fine.
 
 
 #### Clone Repository
