@@ -8,6 +8,7 @@
 #include <inttypes.h>
 #include <stdbool.h>
 #include <string.h>
+#include <getopt.h>
 
 // 64-byte block of memory, accessed via different types
 union block{
@@ -159,8 +160,8 @@ static void nexthash(union block *M, uint32_t *Hash)
     Hash[3] = H[3];
 
     // R1
-    FF(Hash[0], Hash[1], Hash[2], Hash[3], M->threetwo[0], S11, K[0]);  
-    FF(Hash[3], Hash[0], Hash[1], Hash[2], M->threetwo[1], S12, K[1]); 
+    FF(Hash[0], Hash[1], Hash[2], Hash[3], M->threetwo[0], S11, K[0]);
+    FF(Hash[3], Hash[0], Hash[1], Hash[2], M->threetwo[1], S12, K[1]);
     FF(Hash[2], Hash[3], Hash[0], Hash[1], M->threetwo[2], S13, K[2]);
     FF(Hash[1], Hash[2], Hash[3], Hash[0], M->threetwo[3], S14, K[3]);
     FF(Hash[0], Hash[1], Hash[2], Hash[3], M->threetwo[4], S11, K[4]);
@@ -177,58 +178,58 @@ static void nexthash(union block *M, uint32_t *Hash)
     FF(Hash[1], Hash[2], Hash[3], Hash[0], M->threetwo[15], S14, K[15]);
 
     // R2
-    GG(Hash[0], Hash[1], Hash[2], Hash[3], M->threetwo[1], S21, K[16]);  
-    GG(Hash[3], Hash[0], Hash[1], Hash[2], M->threetwo[6], S22, K[17]);  
-    GG(Hash[2], Hash[3], Hash[0], Hash[1], M->threetwo[11], S23, K[18]); 
-    GG(Hash[1], Hash[2], Hash[3], Hash[0], M->threetwo[0], S24, K[19]);  
-    GG(Hash[0], Hash[1], Hash[2], Hash[3], M->threetwo[5], S21, K[20]);  
-    GG(Hash[3], Hash[0], Hash[1], Hash[2], M->threetwo[10], S22, K[21]);  
-    GG(Hash[2], Hash[3], Hash[0], Hash[1], M->threetwo[15], S23, K[22]); 
-    GG(Hash[1], Hash[2], Hash[3], Hash[0], M->threetwo[4], S24, K[23]);  
-    GG(Hash[0], Hash[1], Hash[2], Hash[3], M->threetwo[9], S21, K[24]);  
-    GG(Hash[3], Hash[0], Hash[1], Hash[2], M->threetwo[14], S22, K[25]); 
-    GG(Hash[2], Hash[3], Hash[0], Hash[1], M->threetwo[3], S23, K[26]);  
-    GG(Hash[1], Hash[2], Hash[3], Hash[0], M->threetwo[8], S24, K[27]);  
-    GG(Hash[0], Hash[1], Hash[2], Hash[3], M->threetwo[13], S21, K[28]); 
-    GG(Hash[3], Hash[0], Hash[1], Hash[2], M->threetwo[2], S22, K[29]);  
-    GG(Hash[2], Hash[3], Hash[0], Hash[1], M->threetwo[7], S23, K[30]);  
-    GG(Hash[1], Hash[2], Hash[3], Hash[0], M->threetwo[12], S24, K[31]); 
+    GG(Hash[0], Hash[1], Hash[2], Hash[3], M->threetwo[1], S21, K[16]);
+    GG(Hash[3], Hash[0], Hash[1], Hash[2], M->threetwo[6], S22, K[17]);
+    GG(Hash[2], Hash[3], Hash[0], Hash[1], M->threetwo[11], S23, K[18]);
+    GG(Hash[1], Hash[2], Hash[3], Hash[0], M->threetwo[0], S24, K[19]);
+    GG(Hash[0], Hash[1], Hash[2], Hash[3], M->threetwo[5], S21, K[20]);
+    GG(Hash[3], Hash[0], Hash[1], Hash[2], M->threetwo[10], S22, K[21]);
+    GG(Hash[2], Hash[3], Hash[0], Hash[1], M->threetwo[15], S23, K[22]);
+    GG(Hash[1], Hash[2], Hash[3], Hash[0], M->threetwo[4], S24, K[23]);
+    GG(Hash[0], Hash[1], Hash[2], Hash[3], M->threetwo[9], S21, K[24]);
+    GG(Hash[3], Hash[0], Hash[1], Hash[2], M->threetwo[14], S22, K[25]);
+    GG(Hash[2], Hash[3], Hash[0], Hash[1], M->threetwo[3], S23, K[26]);
+    GG(Hash[1], Hash[2], Hash[3], Hash[0], M->threetwo[8], S24, K[27]);
+    GG(Hash[0], Hash[1], Hash[2], Hash[3], M->threetwo[13], S21, K[28]);
+    GG(Hash[3], Hash[0], Hash[1], Hash[2], M->threetwo[2], S22, K[29]);
+    GG(Hash[2], Hash[3], Hash[0], Hash[1], M->threetwo[7], S23, K[30]);
+    GG(Hash[1], Hash[2], Hash[3], Hash[0], M->threetwo[12], S24, K[31]);
 
     // R3
-    HH(Hash[0], Hash[1], Hash[2], Hash[3], M->threetwo[5], S31, K[32]);  
-    HH(Hash[3], Hash[0], Hash[1], Hash[2], M->threetwo[8], S32, K[33]);  
-    HH(Hash[2], Hash[3], Hash[0], Hash[1], M->threetwo[11], S33, K[34]); 
-    HH(Hash[1], Hash[2], Hash[3], Hash[0], M->threetwo[14], S34, K[35]); 
-    HH(Hash[0], Hash[1], Hash[2], Hash[3], M->threetwo[1], S31, K[36]);  
-    HH(Hash[3], Hash[0], Hash[1], Hash[2], M->threetwo[4], S32, K[37]);  
-    HH(Hash[2], Hash[3], Hash[0], Hash[1], M->threetwo[7], S33, K[38]);  
-    HH(Hash[1], Hash[2], Hash[3], Hash[0], M->threetwo[10], S34, K[39]); 
-    HH(Hash[0], Hash[1], Hash[2], Hash[3], M->threetwo[13], S31, K[40]); 
-    HH(Hash[3], Hash[0], Hash[1], Hash[2], M->threetwo[0], S32, K[41]);  
-    HH(Hash[2], Hash[3], Hash[0], Hash[1], M->threetwo[3], S33, K[42]);  
+    HH(Hash[0], Hash[1], Hash[2], Hash[3], M->threetwo[5], S31, K[32]);
+    HH(Hash[3], Hash[0], Hash[1], Hash[2], M->threetwo[8], S32, K[33]);
+    HH(Hash[2], Hash[3], Hash[0], Hash[1], M->threetwo[11], S33, K[34]);
+    HH(Hash[1], Hash[2], Hash[3], Hash[0], M->threetwo[14], S34, K[35]);
+    HH(Hash[0], Hash[1], Hash[2], Hash[3], M->threetwo[1], S31, K[36]);
+    HH(Hash[3], Hash[0], Hash[1], Hash[2], M->threetwo[4], S32, K[37]);
+    HH(Hash[2], Hash[3], Hash[0], Hash[1], M->threetwo[7], S33, K[38]);
+    HH(Hash[1], Hash[2], Hash[3], Hash[0], M->threetwo[10], S34, K[39]);
+    HH(Hash[0], Hash[1], Hash[2], Hash[3], M->threetwo[13], S31, K[40]);
+    HH(Hash[3], Hash[0], Hash[1], Hash[2], M->threetwo[0], S32, K[41]);
+    HH(Hash[2], Hash[3], Hash[0], Hash[1], M->threetwo[3], S33, K[42]);
     HH(Hash[1], Hash[2], Hash[3], Hash[0], M->threetwo[6], S34, K[43]);
-    HH(Hash[0], Hash[1], Hash[2], Hash[3], M->threetwo[9], S31, K[44]);  
-    HH(Hash[3], Hash[0], Hash[1], Hash[2], M->threetwo[12], S32, K[45]); 
-    HH(Hash[2], Hash[3], Hash[0], Hash[1], M->threetwo[15], S33, K[46]); 
-    HH(Hash[1], Hash[2], Hash[3], Hash[0], M->threetwo[2], S34, K[47]);  
+    HH(Hash[0], Hash[1], Hash[2], Hash[3], M->threetwo[9], S31, K[44]);
+    HH(Hash[3], Hash[0], Hash[1], Hash[2], M->threetwo[12], S32, K[45]);
+    HH(Hash[2], Hash[3], Hash[0], Hash[1], M->threetwo[15], S33, K[46]);
+    HH(Hash[1], Hash[2], Hash[3], Hash[0], M->threetwo[2], S34, K[47]);
 
     // R4
-    II(Hash[0], Hash[1], Hash[2], Hash[3], M->threetwo[0], S41, K[48]);  
-    II(Hash[3], Hash[0], Hash[1], Hash[2], M->threetwo[7], S42, K[49]);  
-    II(Hash[2], Hash[3], Hash[0], Hash[1], M->threetwo[14], S43, K[50]); 
-    II(Hash[1], Hash[2], Hash[3], Hash[0], M->threetwo[5], S44, K[51]);  
-    II(Hash[0], Hash[1], Hash[2], Hash[3], M->threetwo[12], S41, K[52]); 
-    II(Hash[3], Hash[0], Hash[1], Hash[2], M->threetwo[3], S42, K[53]);  
-    II(Hash[2], Hash[3], Hash[0], Hash[1], M->threetwo[10], S43, K[54]); 
-    II(Hash[1], Hash[2], Hash[3], Hash[0], M->threetwo[1], S44, K[55]);  
-    II(Hash[0], Hash[1], Hash[2], Hash[3], M->threetwo[8], S41, K[56]);  
-    II(Hash[3], Hash[0], Hash[1], Hash[2], M->threetwo[15], S42, K[57]); 
-    II(Hash[2], Hash[3], Hash[0], Hash[1], M->threetwo[6], S43, K[58]);  
-    II(Hash[1], Hash[2], Hash[3], Hash[0], M->threetwo[13], S44, K[59]); 
-    II(Hash[0], Hash[1], Hash[2], Hash[3], M->threetwo[4], S41, K[60]);  
-    II(Hash[3], Hash[0], Hash[1], Hash[2], M->threetwo[11], S42, K[61]); 
-    II(Hash[2], Hash[3], Hash[0], Hash[1], M->threetwo[2], S43, K[62]);  
-    II(Hash[1], Hash[2], Hash[3], Hash[0], M->threetwo[9], S44, K[63]);  
+    II(Hash[0], Hash[1], Hash[2], Hash[3], M->threetwo[0], S41, K[48]);
+    II(Hash[3], Hash[0], Hash[1], Hash[2], M->threetwo[7], S42, K[49]);
+    II(Hash[2], Hash[3], Hash[0], Hash[1], M->threetwo[14], S43, K[50]);
+    II(Hash[1], Hash[2], Hash[3], Hash[0], M->threetwo[5], S44, K[51]);
+    II(Hash[0], Hash[1], Hash[2], Hash[3], M->threetwo[12], S41, K[52]);
+    II(Hash[3], Hash[0], Hash[1], Hash[2], M->threetwo[3], S42, K[53]);
+    II(Hash[2], Hash[3], Hash[0], Hash[1], M->threetwo[10], S43, K[54]);
+    II(Hash[1], Hash[2], Hash[3], Hash[0], M->threetwo[1], S44, K[55]);
+    II(Hash[0], Hash[1], Hash[2], Hash[3], M->threetwo[8], S41, K[56]);
+    II(Hash[3], Hash[0], Hash[1], Hash[2], M->threetwo[15], S42, K[57]);
+    II(Hash[2], Hash[3], Hash[0], Hash[1], M->threetwo[6], S43, K[58]);
+    II(Hash[1], Hash[2], Hash[3], Hash[0], M->threetwo[13], S44, K[59]);
+    II(Hash[0], Hash[1], Hash[2], Hash[3], M->threetwo[4], S41, K[60]);
+    II(Hash[3], Hash[0], Hash[1], Hash[2], M->threetwo[11], S42, K[61]);
+    II(Hash[2], Hash[3], Hash[0], Hash[1], M->threetwo[2], S43, K[62]);
+    II(Hash[1], Hash[2], Hash[3], Hash[0], M->threetwo[9], S44, K[63]);
 
 
     Hash[0] += H[0];
@@ -247,6 +248,18 @@ void heading()
     printf("\n MD5 Hash Digest Algorithm");
 }
 
+void help(){
+    printf("Help:\n");
+    printf("-t           --test           tests MD5\n");
+    printf("-h           --help           commands\n");
+    printf("-r           --run           runs programs (***file required***)\n");
+}
+void test(){
+
+    printf("test complete, i guess\n");
+
+}
+
 
 int main(int argc, char *argv[]) {
     // Output string & heading
@@ -254,41 +267,104 @@ int main(int argc, char *argv[]) {
 
     printf("\n");
 
-    if (argc != 2)
+
+    int c;
+
+    while (1)
     {
-        printf("Error: expected single filename as argument.\n");
-        return 1;
+        static struct option long_options[] =
+                {
+                        {"test",    no_argument,      0,  't'},
+                        {"help",     no_argument,       0, 'h'},
+                        {"run",  no_argument,       0, 'r'},
+                        {0, 0, 0, 0}
+                };
+        /* getopt_long stores the option index here. */
+        int option_index = 0;
+
+        c = getopt_long (argc, argv, "thr:",
+                         long_options, &option_index);
+
+        /* Detect the end of the options. */
+        if (c == -1)
+            break;
+
+        switch (c)
+        {
+            case 0:
+
+                if (long_options[option_index].flag != 0)
+                    break;
+                printf ("option %s", long_options[option_index].name);
+                if (optarg)
+                    printf (" with arg %s", optarg);
+                printf ("\n");
+                break;
+
+            case 't':
+                test();
+                break;
+
+            case 'h':
+                help();
+                break;
+
+            case 'r':
+                if (argc != 3)
+                {
+                    printf("Error: expected single filename as argument.\n");
+                    return 1;
+                }
+
+
+                // We assume argv[1] is a filename to open
+                FILE *infile = fopen(argv[2], "rb");
+                if (!infile)
+                {
+                    printf("Error: couldn't open file %s.\n", argv[2]);
+                    return 1;
+                }
+                uint32_t H[] = {
+                        0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476
+                };
+
+                union block M;
+                uint64_t nobits = 0;
+                enum flag status = READ;
+                // Read through all of the padded message blocks.
+                while (nextblock(&M, infile, &nobits, &status)){
+                    // gets nexthash value
+                    nexthash(&M, H);
+                }
+
+                printf("File: %s\n Hash Output: ", argv[2]);
+
+                for (int i = 0; i < 4; i++)
+
+                    printf("%02x%02x%02x%02x",(H[i] >> 0 ) & 0xFF, (H[i] >> 8 ) & 0xFF, (H[i] >> 16) & 0xFF, (H[i] >> 24) & 0xFF);
+
+                printf("\n");
+
+                fclose(infile);
+                break;
+
+            case '?':
+                /* getopt_long already printed an error message. */
+                break;
+
+            default:
+                abort ();
+        }
     }
-    FILE *infile = fopen(argv[1], "rb");
-    if (!infile)
+
+    /* Print any remaining command line arguments (not options). */
+    if (optind < argc)
     {
-        printf("Error: couldn't open file %s.\n", argv[1]);
-        return 1;
-    }
-    uint32_t H[] = {
-            0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476
-    };
-
-    union block M;
-    uint64_t nobits = 0;
-    enum flag status = READ;
-    // Read through all of the padded message blocks.
-    while (nextblock(&M, infile, &nobits, &status)){
-        // gets nexthash value
-        nexthash(&M, H);
+        printf ("non-option ARGV-elements: ");
+        while (optind < argc)
+            printf ("%s ", argv[optind++]);
+        putchar ('\n');
     }
 
-    
-    // print hash
-    printf("File: %s\n Hash Output: ", argv[1]);
-    
-    for (int i = 0; i < 4; i++)
-
-        printf("%02x%02x%02x%02x",(H[i] >> 0 ) & 0xFF, (H[i] >> 8 ) & 0xFF, (H[i] >> 16) & 0xFF, (H[i] >> 24) & 0xFF);
-
-    printf("\n");
-
-    fclose(infile);
-
-    return 0;
+    exit (0);
 }
